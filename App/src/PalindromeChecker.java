@@ -3,7 +3,7 @@ import java.util.Stack;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class UseCase12PalindromeCheckerApp {
+public class PalindromeChecker {
 
     public static void main(String[] args) {
 
@@ -12,20 +12,24 @@ public class UseCase12PalindromeCheckerApp {
         System.out.print("Input a string: ");
         String input = scanner.nextLine();
 
-        System.out.print("Choose Strategy (1-Stack, 2-Deque): ");
-        int choice = scanner.nextInt();
+        PalindromeStrategy stackStrategy = new StackStrategy();
+        PalindromeStrategy dequeStrategy = new DequeStrategy();
 
-        PalindromeStrategy strategy;
+        long start = System.nanoTime();
+        boolean stackResult = stackStrategy.check(input);
+        long end = System.nanoTime();
+        long stackTime = end - start;
 
-        if (choice == 1) {
-            strategy = new StackStrategy();
-        } else {
-            strategy = new DequeStrategy();
-        }
+        start = System.nanoTime();
+        boolean dequeResult = dequeStrategy.check(input);
+        end = System.nanoTime();
+        long dequeTime = end - start;
 
-        boolean result = strategy.check(input);
+        System.out.println("Stack Result: " + stackResult);
+        System.out.println("Stack Execution Time: " + stackTime + " ns");
 
-        System.out.println("Is Palindrome: " + result);
+        System.out.println("Deque Result: " + dequeResult);
+        System.out.println("Deque Execution Time: " + dequeTime + " ns");
 
         scanner.close();
     }
