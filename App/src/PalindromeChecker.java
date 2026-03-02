@@ -1,64 +1,80 @@
-/**
- * -------------------------------------------------------
- * MAIN CLASS – UseCase7PalindromeCheckerApp
- * -------------------------------------------------------
- * Use Case 7: Deque Based Optimized Palindrome Checker
- *
- * Description:
- * This class validates a palindrome using a Deque
- * (Double Ended Queue).
- *
- * Characters are inserted into the deque and compared
- * from both ends using:
- * - removeFirst()
- * - removeLast()
- *
- * This avoids reversing the string and provides
- * an efficient front-to-back comparison.
- *
- * @author Developer
- * @version 7.0
- */
-
-import java.util.Deque;
-import java.util.ArrayDeque;
-
 public class PalindromeChecker {
 
-    /**
-     * Application entry point for UC7.
-     * @param args Command-line arguments
-     */
-    public static void main(String[] args) {
+    static class Node {
+        char data;
+        Node next;
 
-        // Define the input string
-        String input = "refer";
+        Node(char data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
 
-        // Create a Deque to store characters
-        Deque<Character> deque = new ArrayDeque<>();
-
-        // Add all characters into the deque
-        for (char c : input.toCharArray()) {
-            deque.addLast(c);
+    public static boolean isPalindrome(Node head) {
+        if (head == null || head.next == null) {
+            return true;
         }
 
-        // Flag to track palindrome result
-        boolean isPalindrome = true;
+        Node slow = head;
+        Node fast = head;
 
-        // Continue comparison while more than one element exists
-        while (deque.size() > 1) {
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
 
-            char front = deque.removeFirst();
-            char rear = deque.removeLast();
+        Node secondHalf = reverse(slow);
+        Node firstHalf = head;
+        Node temp = secondHalf;
 
-            if (front != rear) {
-                isPalindrome = false;
-                break;
+        while (temp != null) {
+            if (firstHalf.data != temp.data) {
+                return false;
+            }
+            firstHalf = firstHalf.next;
+            temp = temp.next;
+        }
+
+        return true;
+    }
+
+    private static Node reverse(Node head) {
+        Node prev = null;
+        Node current = head;
+
+        while (current != null) {
+            Node next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+
+        return prev;
+    }
+
+    public static Node createLinkedList(String input) {
+        Node head = null;
+        Node tail = null;
+
+        for (char c : input.toCharArray()) {
+            Node newNode = new Node(c);
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
             }
         }
 
-        // Display result
-        System.out.println("Input: " + input);
-        System.out.println("Is Palindrome? : " + isPalindrome);
+        return head;
+    }
+
+    public static void main(String[] args) {
+        String input = "level";
+        Node head = createLinkedList(input);
+        boolean result = isPalindrome(head);
+        System.out.println("Input : " + input);
+        System.out.println("Is Palindrome? : " + result);
     }
 }
