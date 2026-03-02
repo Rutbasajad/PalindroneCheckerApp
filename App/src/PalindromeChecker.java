@@ -10,6 +10,7 @@ public class PalindromeChecker {
         }
     }
 
+
     public static boolean isPalindrome(Node head) {
         if (head == null || head.next == null) {
             return true;
